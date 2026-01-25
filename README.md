@@ -81,3 +81,40 @@ Two distinct approaches are used to model the stock price movements:
 
 ### 3. Portfolio Optimization
 Modern Portfolio Theory (MPT) principles are applied to determine the optimal asset allocation. The goal is to maximize the Sharpe Ratio (risk-adjusted return).
+
+
+
+## Results (as of latest commit)
+
+The models were evaluated on the test set using Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and Mean Absolute Percentage Error (MAPE).
+
+### Model Performance Comparison
+
+| Model | MAE | RMSE | MAPE |
+|-------|-----|------|------|
+| **ARIMA** | 96.25 | 126.67 | 27.97% |
+| **LSTM** | 101.93 | 120.68 | 45.16% |
+
+*Note: Lower values indicate better performance.*
+
+### Visualizations
+
+The project includes various visualizations generated within the notebooks:
+
+-   **Time Series Decomposition**: Breaking down prices into trend, seasonal, and residual components.
+-   **Loss Curves**: Tracking the LSTM training process.
+-   **Forecast vs. Actual Plots**: Visual validation of model predictions.
+-   **Efficient Frontier**: Visualizing the risk-return trade-off for portfolio optimization.
+
+## Usage
+
+Run the notebooks in sequential order to replicate the full analysis pipeline:
+
+1.  Start Jupyter Lab or Notebook:
+    ```bash
+    jupyter lab
+    ```
+2.  Open `notebooks/task_1_eda.ipynb` to begin the data analysis.
+3.  Proceed through tasks 2 to 5 to generate models, forecasts, and optimization results.
+
+    
