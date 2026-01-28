@@ -21,19 +21,27 @@ def fetch_data(tickers, start_date, end_date):
     logging.info(f"Fetching data for {tickers} from {start_date} to {end_date}...")
     
     try:
-        # Download data
-        data = yf.download(tickers, start=start_date, end=end_date, group_by='ticker', auto_adjust=True)
+        # Using Ticker.history as a fallback for yf.download issues
+        if isinstance(tickers, str):
+            tickers = [tickers]
+            
+        data_frames = {}
+        for ticker in tickers:
+            try:
+                metrics = yf.Ticker(ticker).history(start=start_date, end=end_date)
+                if metrics.empty:
+                     logging.warning(f"No data found for {ticker}")
+                else:
+                    data_frames[ticker] = metrics
+            except Exception as e:
+                logging.error(f"Failed to fetch {ticker}: {e}")
         
-        # Determine structure based on number of tickers
-        if len(tickers) == 1:
-            # If single ticker, just return it but maybe add a Ticker column or keep simple
-            data.columns = [f"{col}" for col in data.columns] # Flatten if needed or keep MultiIndex
-            logging.info("Data fetched successfully.")
-            return data
-        
-        # If multiple tickers, yfinance returns MultiIndex columns (Ticker, OHLCV)
-        # We might want to stack it or keep it wide. 
-        # For this project, stacking or having a clean structure is better.
+        if not data_frames:
+             return pd.DataFrame()
+
+        # Combine to match yf.download(group_by='ticker') format
+        # Columns should be MultiIndex: (Ticker, Price_Type)
+        data = pd.concat(data_frames, axis=1)
         
         logging.info("Data fetched successfully.")
         return data
